@@ -1,0 +1,13 @@
+package com.lexi.comp4004.util;
+
+public enum BroadcastKey {
+	STARTED, CONNECTED,
+
+	USERS_UPDATED, GAME_IN_PROGRESS,
+
+	GAME_STARTED, GAME, WINNER,
+
+	MESSAGE, ERROR, FATAL_ERROR, DISCONNECT,
+
+	DEV_TOKEN
+}
