@@ -42,10 +42,70 @@ public class ConsoleInterface implements GameObserver {
 		}
 		System.out.println();
 	}
+	
+	private Card makeCard(String input) {
+		try {
+		String suit = input.substring(0, 0);
+		String rank = input.substring(1);
+		
+		// TODO
+		if ("H".equals(suit)) {
+			
+		} else if ("S".equals(suit)) {
+			
+		} else if ("C".equals(suit)) {
+			
+		} else if ("D".equals(suit)) {
+			
+		}
+		
+		} catch (Exception e) {
+			return null;
+		}
+		return null;
+	}
 
 	public DevSetUp setUpDevGame() {
-		// TODO
-		return null;
+		DevSetUp setUp = new DevSetUp();
+		while (true) {
+			try {
+				System.out.println("Enter number of human players:");
+				System.out.print("> ");
+				int numHumans = Integer.valueOf(c.readLine());
+
+
+				System.out.println("Enter number of ai players:");
+				System.out.print("> ");
+				int numAI = Integer.valueOf(c.readLine());
+
+				List<Integer> aiPlayers = new ArrayList<Integer>();
+				for (int i = 0; i < numAI; i++) {
+					System.out.println("Enter strategy number for ai player " + (i + 1));
+					System.out.print("> ");
+					int strat = Integer.valueOf(c.readLine());
+					aiPlayers.add(strat == 1 || strat == 2 ? strat : 1);
+					List<Card> cards = new ArrayList<Card>();
+					while (cards.size() < 5) {
+						System.out.println("Enter cards for ai player " + (i + 1) + " (i.e., CA for ace of clubs)");
+						System.out.print("> ");
+						String input = c.readLine();
+						Card c = makeCard(input);
+						if (c == null) {
+							System.out.println("Invalid card input");
+						} else {
+							cards.add(c);
+						}
+					}
+					setUp.addAiCards(cards);
+				}
+				setUp.setAiPlayers(aiPlayers);
+				setUp.setNumPlayers(numHumans + numAI);
+				break;
+			} catch (Exception e) {
+				System.out.println("Invalid input");
+			}
+		}
+		return setUp;
 	}
 
 	public SetUp setUpGame() {
