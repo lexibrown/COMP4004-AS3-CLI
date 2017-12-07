@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import com.lexi.comp4004.common.template.SetUp;
@@ -149,11 +150,15 @@ public class GameLobbyView extends JFrame implements ActionListener, DialogClien
 		}
 	}
 
-	private void updateUserList(List<String> users) {
-		listModel.clear();
-		for (int i = 0; i < users.size(); i++) {
-			listModel.addElement(users.get(i));
-		}
+	private void updateUserList(final List<String> users) {
+		SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+        		listModel.clear();
+        		for (int i = 0; i < users.size(); i++) {
+        			listModel.addElement(users.get(i));
+        		}
+            }
+        });
 	}
 	
 	private void updateGameStatus(boolean started) {
@@ -185,7 +190,13 @@ public class GameLobbyView extends JFrame implements ActionListener, DialogClien
 		switch (type) {
 		case CONNECTED:
 			lblUsername.setText("Username: " + arg[0].toString());
-			setVisible(true);
+			SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+        			setVisible(true);
+                }
+            });
+			observable.lobbyUsers();
+			observable.lobbyStatus();
 			break;
 		case USERS_UPDATED:
 			if (arg[0] instanceof List) {
@@ -220,6 +231,9 @@ public class GameLobbyView extends JFrame implements ActionListener, DialogClien
 			} else {
 				displayError("Unknown error occurred!");
 			}
+			break;
+		case DEV_TOKEN:
+			displayMessage("Dev token received.");
 			break;
 		default:
 			break;
