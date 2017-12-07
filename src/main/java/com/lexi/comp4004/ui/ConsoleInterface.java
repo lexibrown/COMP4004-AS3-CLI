@@ -9,6 +9,8 @@ import java.util.NoSuchElementException;
 import java.util.Observable;
 
 import com.lexi.comp4004.common.game.data.Card;
+import com.lexi.comp4004.common.game.data.Card.Rank;
+import com.lexi.comp4004.common.game.data.Card.Suit;
 import com.lexi.comp4004.common.game.data.ClientPoker;
 import com.lexi.comp4004.common.game.data.Opponent;
 import com.lexi.comp4004.common.game.data.Result;
@@ -42,23 +44,66 @@ public class ConsoleInterface implements GameObserver {
 		}
 		System.out.println();
 	}
-	
+
 	private Card makeCard(String input) {
 		try {
-		String suit = input.substring(0, 0);
-		String rank = input.substring(1);
-		
-		// TODO
-		if ("H".equals(suit)) {
-			
-		} else if ("S".equals(suit)) {
-			
-		} else if ("C".equals(suit)) {
-			
-		} else if ("D".equals(suit)) {
-			
-		}
-		
+			String suit = input.substring(0, 0);
+			int num = Integer.valueOf(input.substring(1));
+
+			Rank rank = null;
+			switch (num) {
+			case 1:
+				rank = Rank.Ace;
+				break;
+			case 2:
+				rank = Rank.Two;
+				break;
+			case 3:
+				rank = Rank.Three;
+				break;
+			case 4:
+				rank = Rank.Four;
+				break;
+			case 5:
+				rank = Rank.Five;
+				break;
+			case 6:
+				rank = Rank.Six;
+				break;
+			case 7:
+				rank = Rank.Seven;
+				break;
+			case 8:
+				rank = Rank.Eight;
+				break;
+			case 9:
+				rank = Rank.Nine;
+				break;
+			case 10:
+				rank = Rank.Ten;
+				break;
+			case 11:
+				rank = Rank.Jack;
+				break;
+			case 12:
+				rank = Rank.Queen;
+				break;
+			case 13:
+				rank = Rank.King;
+				break;
+			}
+			if (rank == null) {
+				return null;
+			} else if ("H".equals(suit)) {
+				return new Card(rank, Suit.Hearts);
+			} else if ("S".equals(suit)) {
+				return new Card(rank, Suit.Spades);
+			} else if ("C".equals(suit)) {
+				return new Card(rank, Suit.Clubs);
+			} else if ("D".equals(suit)) {
+				return new Card(rank, Suit.Diamonds);
+			}
+
 		} catch (Exception e) {
 			return null;
 		}
@@ -66,14 +111,36 @@ public class ConsoleInterface implements GameObserver {
 	}
 
 	public DevSetUp setUpDevGame() {
-		DevSetUp setUp = new DevSetUp();
+		DevSetUp setUp = null;
 		while (true) {
+			setUp = new DevSetUp();
 			try {
 				System.out.println("Enter number of human players:");
 				System.out.print("> ");
 				int numHumans = Integer.valueOf(c.readLine());
 
-
+				List<String> players = new ArrayList<String>();
+				for (int i = 0; i < numHumans; i++) {
+					System.out.println("Enter name of player " + (i + 1));
+					System.out.print("> ");
+					String name = c.readLine();
+					players.add(name);
+					List<Card> cards = new ArrayList<Card>();
+					while (cards.size() < 5) {
+						System.out.println("Enter cards for player " + name + " (i.e., C1 for ace of clubs)");
+						System.out.print("> ");
+						String input = c.readLine();
+						Card c = makeCard(input);
+						if (c == null) {
+							System.out.println("Invalid card input");
+						} else {
+							cards.add(c);
+						}
+					}
+					setUp.addPlayerCards(cards);
+				}
+				setUp.setPlayers(players);
+				
 				System.out.println("Enter number of ai players:");
 				System.out.print("> ");
 				int numAI = Integer.valueOf(c.readLine());
@@ -86,7 +153,7 @@ public class ConsoleInterface implements GameObserver {
 					aiPlayers.add(strat == 1 || strat == 2 ? strat : 1);
 					List<Card> cards = new ArrayList<Card>();
 					while (cards.size() < 5) {
-						System.out.println("Enter cards for ai player " + (i + 1) + " (i.e., CA for ace of clubs)");
+						System.out.println("Enter cards for ai player " + (i + 1) + " (i.e., C1 for ace of clubs)");
 						System.out.print("> ");
 						String input = c.readLine();
 						Card c = makeCard(input);
@@ -100,6 +167,25 @@ public class ConsoleInterface implements GameObserver {
 				}
 				setUp.setAiPlayers(aiPlayers);
 				setUp.setNumPlayers(numHumans + numAI);
+				
+				
+				List<Card> cards = new ArrayList<Card>();
+				System.out.println("Add cards to deck (i.e., C1 for ace of clubs). Enter nothing when done.");
+				while (true) {
+					System.out.print("> ");
+					String input = c.readLine();
+					if (input.isEmpty()) {
+						break;
+					}
+					Card c = makeCard(input);
+					if (c == null) {
+						System.out.println("Invalid card input");
+					} else {
+						cards.add(c);
+					}
+				}
+				setUp.setDeck(cards);
+				
 				break;
 			} catch (Exception e) {
 				System.out.println("Invalid input");
@@ -217,7 +303,8 @@ public class ConsoleInterface implements GameObserver {
 		System.out.println();
 
 		if (observable.isTurn()) {
-			//listen();
+			System.out.println("It is your turn!");
+			// listen();
 		}
 	}
 
