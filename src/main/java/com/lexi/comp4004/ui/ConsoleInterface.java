@@ -47,7 +47,7 @@ public class ConsoleInterface implements GameObserver {
 
 	private Card makeCard(String input) {
 		try {
-			String suit = input.substring(0, 0);
+			String suit = input.substring(0, 1);
 			int num = Integer.valueOf(input.substring(1));
 
 			Rank rank = null;
@@ -94,13 +94,13 @@ public class ConsoleInterface implements GameObserver {
 			}
 			if (rank == null) {
 				return null;
-			} else if ("H".equals(suit)) {
+			} else if ("H".equalsIgnoreCase(suit)) {
 				return new Card(rank, Suit.Hearts);
-			} else if ("S".equals(suit)) {
+			} else if ("S".equalsIgnoreCase(suit)) {
 				return new Card(rank, Suit.Spades);
-			} else if ("C".equals(suit)) {
+			} else if ("C".equalsIgnoreCase(suit)) {
 				return new Card(rank, Suit.Clubs);
-			} else if ("D".equals(suit)) {
+			} else if ("D".equalsIgnoreCase(suit)) {
 				return new Card(rank, Suit.Diamonds);
 			}
 
