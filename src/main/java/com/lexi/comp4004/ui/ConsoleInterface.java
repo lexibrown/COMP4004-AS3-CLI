@@ -437,7 +437,7 @@ public class ConsoleInterface implements GameObserver {
 								System.out.println();
 								System.out.println("=====Dev Tools=====");
 								System.out.println("Reset Game");
-								System.out.println("Set Up Test Game");
+								System.out.println("Test Game");
 							}
 
 						} else if (state == 2) { // game
